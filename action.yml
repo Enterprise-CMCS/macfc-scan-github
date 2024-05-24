@@ -1,0 +1,55 @@
+name: 'Scan GitHub for DevSecOps (DSO) Events'
+description: 'Uses the GitHub Actions API to scan for event data to send the MACBIS DSO Metrics API'
+inputs:
+  scan-github-version:
+    description: 'The version constraint for the Enterprise-CMCS/mac-fc-dso-metrics/cmd/scan-github program in semantic version syntax. Defaults to the latest version (we recommend pinning to a specific version or range)'
+    required: false
+  aws-account-id:
+    description: 'The AWS account ID containing the DSO Metrics cross-account role used for reporting the event'
+    required: true
+  aws-region:
+    description: '(Optional) AWS region'
+    required: false
+    default: us-east-1
+  oidc-role:
+    description: '(Optional) The OIDC role to assume that has permission to assume the DSO Metrics cross-account role. If not provided, AWS credentials with this permission must be set in the environment when this action is run'
+    required: false
+  oidc-role-session-name:
+    description: '(Optional) OIDC role session name'
+    required: false
+    default: 'ReportDSOEvents'
+  github-access-token:
+    description: A GitHub token with repo scope for the target repo
+  scan-config:
+    description: 'A yaml file with a valid configuration for the scan-github tool. See README.md for the syntax of the configuration'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Get OIDC credentials
+      if: inputs.oidc-role != ''
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ inputs.oidc-role}}
+        role-session-name: ${{ inputs.oidc-role-session-name }}
+        aws-region: ${{ inputs.aws-region }}
+
+    - name: Assume DSO metrics reporting role
+      id: assume-dso-role
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: arn:aws:iam::${{ inputs.aws-account-id}}:role/delegatedadmin/developer/ct-cmcs-mac-fc-dso-metrics-report-events-role
+        role-session-name: ${{ inputs.oidc-role-session-name }}
+        aws-region: ${{ inputs.aws-region }}
+        role-chaining: true
+        role-skip-session-tagging: true
+
+    - name: Scan GitHub for DSO events
+      id: scan-github
+      uses: Enterprise-CMCS/mac-fc-scan-github/.github/actions/scan-github@v1.0.0
+      with:
+        github-access-token: ${{ inputs.github-access-token }}
+        config: ${{ inputs.scan-config}}
+        version: ${{ inputs.scan-github-version}}
+
+
