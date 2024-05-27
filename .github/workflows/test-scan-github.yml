@@ -19,7 +19,7 @@ jobs:
       uses: ./.github/actions/scan-github
       with:
         args: -h
-        version: "v0.6.0"
+        version: "v1.0.0"
 
     - name: Assert against outputs
       if: ${{ (steps.test-action.outputs.exit-code != 0)  ||  (!contains(steps.test-action.outputs.error-output, 'scan-github')) }}
