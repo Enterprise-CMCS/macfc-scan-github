@@ -27,7 +27,6 @@ on:
 
 permissions:
   id-token: write   # This is required for requesting the JWT for OIDC
-  contents: read    # This is required for actions/checkout
 
 jobs:
   SendDSOEvents:
