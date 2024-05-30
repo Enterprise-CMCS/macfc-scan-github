@@ -1,0 +1,31 @@
+name: Test scan-github action
+
+on:
+  push:
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Test scan-github action
+      id: test-action
+      uses: ./.github/actions/scan-github
+      with:
+        args: -h
+        version: "v1.0.0"
+
+    - name: Assert against outputs
+      if: ${{ (steps.test-action.outputs.exit-code != 0)  ||  (!contains(steps.test-action.outputs.error-output, 'scan-github')) }}
+      run: |
+        echo "Exit code and output did not match expected"
+        echo "Exit code: ${{ steps.test-action.outputs.exit-code }}"
+        echo "Stdout: ${{ steps.test-action.outputs.output }}"
+        echo "Stderr: ${{ steps.test-action.outputs.error-output }}"
+        exit 1

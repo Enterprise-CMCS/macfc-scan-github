@@ -1,0 +1,24 @@
+name: scan-github
+description: 'Uses the GitHub API to create events from past workflow runs, and sends event data to the MACBIS DevSecOps Metrics API'
+inputs:
+  version:
+    description: The version constraint for the scan-github program in semantic version syntax. Defaults to the latest version (we recommend pinning to a specific version or range)
+    default: "*"
+  github-access-token:
+    description: A GitHub token with repo scope for the target repo
+    default: ${{ github.token }}
+  config:
+    description: A YAML string with a valid configuration for the scan-github tool. See Enterprise-CMCS/mac-fc-dso-metrics/cmd/scan-github/README.md for the syntax of the configuration
+  args:
+    description: Arguments to the scan-github program
+    default: ""
+outputs:
+  exit-code:
+    description: The exit code of the program
+  output:
+    description: The output of the program (stdout)
+  error-output:
+    description: The error output of the program (stderr)
+runs:
+  using: node20
+  main: ../../../build/index.js
