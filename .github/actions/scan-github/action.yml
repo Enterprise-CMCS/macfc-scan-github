@@ -8,7 +8,7 @@ inputs:
     description: A GitHub token with repo scope for the target repo
     default: ${{ github.token }}
   config:
-    description: A yaml file with a valid configuration for the scan-github tool. See Enterprise-CMCS/mac-fc-dso-metrics/cmd/scan-github/README.md for the syntax of the confuration
+    description: A YAML string with a valid configuration for the scan-github tool. See Enterprise-CMCS/mac-fc-dso-metrics/cmd/scan-github/README.md for the syntax of the configuration
   args:
     description: Arguments to the scan-github program
     default: ""

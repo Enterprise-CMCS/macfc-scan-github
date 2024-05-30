@@ -4,6 +4,7 @@ inputs:
   scan-github-version:
     description: 'The version constraint for the Enterprise-CMCS/mac-fc-dso-metrics/cmd/scan-github program in semantic version syntax. Defaults to the latest version (we recommend pinning to a specific version or range)'
     required: false
+    default: "*"
   aws-account-id:
     description: 'The AWS account ID containing the DSO Metrics cross-account role used for reporting the event'
     required: true
