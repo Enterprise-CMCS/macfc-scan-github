@@ -47,7 +47,7 @@ runs:
 
     - name: Scan GitHub for DSO events
       id: scan-github
-      uses: Enterprise-CMCS/mac-fc-scan-github/.github/actions/scan-github@v1.0.0
+      uses: Enterprise-CMCS/mac-fc-scan-github/.github/actions/scan-github@v1.0.1
       with:
         github-access-token: ${{ inputs.github-access-token }}
         config: ${{ inputs.scan-config}}
