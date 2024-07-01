@@ -31,7 +31,7 @@ permissions:
 jobs:
   SendDSOEvents:
   - name: Send DSO events
-    uses: Enterprise-CMCS/mac-fc-scan-github@v1.0.0
+    uses: Enterprise-CMCS/mac-fc-scan-github@v1.0.1
     with:
       aws-account-id: {your aws account ID}
       oidc-role: arn:aws:iam::{your aws account ID}:role/delegatedadmin/developer/professor-mac-github-oidc
@@ -40,9 +40,10 @@ jobs:
         events:  # a list of event specifications such as the following one
         - type: test  # test or deploy
 
-          # The name and team of the events to create when matching workflows are found
-          name: prod-e2e
+          # The name, team, and environment of the events to create when matching workflows are found (all required; "none" is allowed for environment)
+          name: e2e
           team: MAC-FC
+          environment: prod
 
           # Which GitHub repo and workflow to check for runs
           owner: Enterprise-CMCS
